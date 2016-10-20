@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MaxShare-Android</string>
+
+    <string name="ml_sina_weibo_app_id">2045436852</string>
+    <!--<string name="ml_sina_weibo_app_id">2045436852</string>-->
+    <string name="qq_app_id">tencent222222</string>
+    <string name="ml_qq_app_id">222222</string>
+    <string name="ml_wechat_app_id">wxd8a0443c3c2d6bde</string>
+    <string name="ml_wechat_app_secret">0b10a7faa1af8e47c80e69cfcccf9b0c</string>
+
+
+</resources>
