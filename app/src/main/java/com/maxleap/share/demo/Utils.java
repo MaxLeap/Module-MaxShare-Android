@@ -40,7 +40,6 @@ import java.net.URLConnection;
 import java.util.List;
 
 /**
- * Created by xupanpan on 16/10/17.
  */
 public class Utils {
 

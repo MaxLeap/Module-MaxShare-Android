@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 /**
- * Created by xupanpan on 16/10/17.
  */
 public class InnerShareActivity extends BaseActivity {
 

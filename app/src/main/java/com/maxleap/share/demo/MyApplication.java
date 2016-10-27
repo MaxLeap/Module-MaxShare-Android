@@ -6,7 +6,6 @@ import android.content.Context;
 import com.maxleap.social.MLHermes;
 
 /**
- * Created by xupanpan on 16/10/17.
  */
 public class MyApplication extends Application {
 

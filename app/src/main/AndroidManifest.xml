@@ -52,7 +52,7 @@
             android:launchMode="singleTop" />
 
         <activity-alias
-            android:name=".wxapi.WXEntryActivity"
+            android:name="${applicationId}.wxapi.WXEntryActivity"
             android:enabled="true"
             android:exported="true"
             android:targetActivity="com.maxleap.social.thirdparty.WXEntryActivity" />

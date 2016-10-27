@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by xupanpan on 16/10/17.
+ * 第三方分享示例
  */
 public class ThridShareActivity extends BaseActivity {
 
@@ -118,7 +118,7 @@ public class ThridShareActivity extends BaseActivity {
         }
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
-        this.startActivityForResult(Intent.createChooser(intent,"本地图片"), 0);
+        this.startActivityForResult(Intent.createChooser(intent, "本地图片"), 0);
     }
 
     private void startPickLocaleVedio() {
@@ -153,12 +153,9 @@ public class ThridShareActivity extends BaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
-        if(shareProvider != null){
+        if (shareProvider != null) {
             shareProvider.onNewIntent(intent);
         }
-
-
     }
 
     Dialog bottomDialog;
@@ -177,8 +174,6 @@ public class ThridShareActivity extends BaseActivity {
     public List<ItemBean> list;
 
     public ShareItem mShareItem;
-
-
 
 
     public class DialogAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -234,11 +229,11 @@ public class ThridShareActivity extends BaseActivity {
                     mShareItem.isTimeLine = itemBean.isTimeLine;
 
                     //新浪微博分享视频、音乐、网页，都需要显示一张缩略图,大小不得超过 32kb，如果不设置，将分享不成功！
-                    if(itemBean.type==ShareType.TYPE_SINA&& mShareItem.bitmap == null &&(!TextUtils.isEmpty(mShareItem.actionUrl)|| !TextUtils.isEmpty(mShareItem.musicUrl)|| !TextUtils.isEmpty(mShareItem.videoUrl))){
+                    if (itemBean.type == ShareType.TYPE_SINA && mShareItem.bitmap == null && (!TextUtils.isEmpty(mShareItem.actionUrl) || !TextUtils.isEmpty(mShareItem.musicUrl) || !TextUtils.isEmpty(mShareItem.videoUrl))) {
                         mShareItem.bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
                     }
 
-                     shareProvider = itemBean.getShareProvider();
+                    shareProvider = itemBean.getShareProvider();
 
                     shareProvider.shareItem(mShareItem, new EventListener() {
                         @Override
@@ -318,12 +313,11 @@ public class ThridShareActivity extends BaseActivity {
             if (path != null) {
                 etShareIamgepath.setText(path);
             }
-        }else if(requestCode ==100){
+        } else if (requestCode == 100) {
 
             String path = null;
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null && data.getData() != null) {
-                    // 根据返回的URI获取对应的SQLite信息
                     Uri uri = data.getData();
                     path = Utils.getPath(this, uri);
                 }
@@ -333,5 +327,18 @@ public class ThridShareActivity extends BaseActivity {
             }
         }
 
+        if (shareProvider != null) {
+            shareProvider.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (shareProvider != null) {
+            shareProvider.dispose();
+        }
     }
 }

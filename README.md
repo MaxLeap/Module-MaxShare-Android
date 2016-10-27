@@ -1,3 +1,26 @@
+
+# 准备
+
+## 说明
+
+   微信、微博的第三方分享需要调用其客户端，会对分享请求进行认证。需要在其平台上进行应用的注册，和填写应用包名和签名等信息，如果填写的签名错误，会导致无法打开分享页面。
+  
+   - 本示例Demo，使用的keystore为微博sdk demo中提供用来测试的keystore。
+   - 对于微博分享，所以不需要在微博的网站上填写签名信息，不要更改本demo中测试对应的applicationId，即可在本地运行测试。
+   - 对于微信分享，在maxleap的微信开发者账号下，已经进行注册，并签名，如果用来测试无需更改任何信息。
+   - 对于qq分享，无需签名认证，只要appid正确即可，本示例中为qq sdk demo中用于测试的appid。
+    
+    
+## 使用
+
+- 将此demo工程导入AS中.
+
+- 将本示例中keystore文件夹下的debug.keystore文件替换本机AS安装目录.android/debug.keystore即可，无需密码。
+
+- 使用默认的签名进行打包运行，即可正常测试分享。
+
+
+
 # 社交分享
 
 社交分享目前支持五种平台：微信朋友圈，微信好友，QQ 好友，QQ 空间和新浪微博。
@@ -18,7 +41,7 @@
 
 ### 申请AppID和配置签名
 
-下载完第三方平台的 SDK 后请按照各平台的规定申请应用，注意第三方平台上填写的应用包名和签名必须确保正确。
+下载完第三方平台的 SDK 后请按照各平台的规定申请应用，注意第三方平台上填写的应用`包名`和`签名`必须确保正确，否则您将无法跳转到分享界面。
 
 
 
@@ -41,7 +64,7 @@ compile 'com.android.support:support-v4:24.2.0'
 
 ### 配置appID到应用
 
-将申请的appid等信息，在res->values->string.xml中配置如下：
+将申请的appid等信息，在res->values->`string.xml`中配置如下：
 
 ```xml
     <string name="ml_sina_weibo_app_id">your weibo appid</string>
@@ -53,7 +76,7 @@ compile 'com.android.support:support-v4:24.2.0'
 
 ### 配置AndroidManifest.xml
 
-将以下平台对应的组件配置到您项目的AndroidManifest.xml中
+将以下平台对应的组件配置到您项目的`AndroidManifest.xml`中
 
 #### 微信
 
@@ -62,13 +85,14 @@ compile 'com.android.support:support-v4:24.2.0'
         android:name="com.maxleap.social.thirdparty.WXEntryActivity"
         android:launchMode="singleTop"/>
     <activity-alias
-        android:name=".wxapi.WXEntryActivity"
+        android:name="${applicationId}.wxapi.WXEntryActivity"
         android:targetActivity="com.maxleap.social.thirdparty.WXEntryActivity"
         android:enabled="true"
         android:exported="true"/>
 ```
 
 #### QQ
+
 ```xml
         <activity
                 android:name="com.tencent.tauth.AuthActivity"
@@ -92,6 +116,7 @@ compile 'com.android.support:support-v4:24.2.0'
 ```
 
 #### weibo
+
 ```xml
         <activity
                 android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
@@ -107,7 +132,7 @@ compile 'com.android.support:support-v4:24.2.0'
 
 ### MLHermes
 
-首先在Application中对MLHermes进行初始化
+首先在`Application`中对MLHermes进行初始化
 
 ```java
     //maxleap上申请的appid和apikey
@@ -201,7 +226,7 @@ ShareProvider 目前共有以下四个子类：
 - `WeiboShareProvider`	微博分享
 - `QQShareProvider`	QQ 好友分享
 - `QZoneShareProvider`	QZone 分享
-- `WechatShareProvider`	微信分享，默认分享到微信好友，如果需要分享到朋友圈需要修改 `ShareItem` 的参数 `shareItem.putExtra(ShareItem.EXTRA_TIMELINE, isTimeline);`。
+- `WechatShareProvider`	微信分享，默认分享到微信好友，如果需要分享到朋友圈需要 `mShareItem.isTimeLine = true`。
 
 进行分享
 
@@ -223,3 +248,46 @@ shareProvider.shareItem(shareItem, new EventListener() {
     }
 });
 ```
+
+### 分享后回调监听
+
+- 微信
+
+微信分享后监听已经在sdk中做了实现，您无需在做处理。
+
+- QQ
+
+ QQ分享或者QQ ZONE分享需要在`onActivityResult()`中加入回调方法。
+ 
+ 示例如下：
+
+```
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(shareProvider != null){
+            shareProvider.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+```
+
+
+
+- 微博
+
+ 微博分享需要在`onNewIntent()`中加入回调方法
+ 
+ 示例如下：
+ 
+```
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (shareProvider != null) {
+            shareProvider.onNewIntent(intent);
+        }
+    }
+```
+
+
+您可参考开源组件 [MaxShare](https://github.com/MaxLeap/Module-MaxShare-Android) 中的相关调用实现。
