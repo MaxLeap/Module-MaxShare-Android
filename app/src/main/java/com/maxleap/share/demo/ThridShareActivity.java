@@ -144,6 +144,7 @@ public class ThridShareActivity extends BaseActivity {
                 .vdeoUrl(cbVideourl.isChecked() ? etShareVideourl.getText().toString() : null)
                 .imagePath(cbImagepath.isChecked() ? etShareIamgepath.getText().toString() : null)
                 .imageUrl(cbImageurl.isChecked() ? etShareImageurl.getText().toString() : null)
+                .bitmap(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
                 .createShareItem();
 
         showShareDialog(shareItem);
